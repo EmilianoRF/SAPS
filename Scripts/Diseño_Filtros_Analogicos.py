@@ -28,9 +28,9 @@ plt.close('all') # cerrar gráficas anteriores
 APROXIMACION = 'Butterworth'  # 'Chebyshev' o 'Butterworth'
 TIPO =  'Pasa Bajo'         # 'Pasa Bajo', 'Pasa Alto' o 'Pasa Banda'
 RIPPLE = 3                  # en dB (usado en aprox. de Chebychev)
-FP1 = 15                  # Frec. límite para la banda de paso en Hz (frec. de corte en Butterworth, frec. de fin de ripple para Chebyshev)
-FS1 = 50                  # Frec. límite para la banda de rechazo en Hz
-AT1 = 15                    # Atenuación mínima en dB en la banda de rechazo (a partir de FS1)
+FP1 = 20                  # Frec. límite para la banda de paso en Hz (frec. de corte en Butterworth, frec. de fin de ripple para Chebyshev)
+FS1 = 40                  # Frec. límite para la banda de rechazo en Hz
+AT1 = 14                    # Atenuación mínima en dB en la banda de rechazo (a partir de FS1)
 
 if TIPO == 'Pasa Banda':
     FP2 = 2000              # Frec. límite (superior) para la banda de paso en Hz (para pasa banda)

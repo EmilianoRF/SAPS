@@ -27,17 +27,19 @@ ts = 1 / FS
 N  = FS*T                        
 # Vector de tiempos
 t  = np.linspace(0, N * ts, N)
+# Frecuencia de muestreo propuesta
+fm = 40
 # Frecuencia de corte
-fc = 40
+fc = fm/2
 # Sensibilidad del sensor para convertir g a V en [mV]
 sensibilidad_sensor = 300 
 # Delta de voltaje del conversoren [mV]
 deltaV = 3.22
-# Vectores para almacenar las amplitudes máximas por encima de fc/2
+# Vectores para almacenar las amplitudes máximas por encima de fc
 maximos_x   = []
 maximos_y   = []
 maximos_z   = []
-# Vectores para almacenar las amplitudes en fc/2
+# Vectores para almacenar las amplitudes en fc
 amplitud_mitad_fc_x = []
 amplitud_mitad_fc_y = []
 amplitud_mitad_fc_z = []
@@ -61,14 +63,14 @@ for gesto in classmap:
             mag_fft_y = mag_fft_y*sensibilidad_sensor
             mag_fft_z = mag_fft_z*sensibilidad_sensor
             
-            # Se guardan las magnitudes de los módulos de las FFTs en fc/2
-            amplitud_mitad_fc_x.append((classmap[gesto],(fc/2,mag_fft_x[np.where(frec == fc/2)[0][0]])))
-            amplitud_mitad_fc_y.append((classmap[gesto],(fc/2,mag_fft_y[np.where(frec == fc/2)[0][0]])))
-            amplitud_mitad_fc_z.append((classmap[gesto],(fc/2,mag_fft_z[np.where(frec == fc/2)[0][0]])))
+            # Se guardan las magnitudes de los módulos de las FFTs en fc
+            amplitud_mitad_fc_x.append((classmap[gesto],(fc,mag_fft_x[np.where(frec == fc)[0][0]])))
+            amplitud_mitad_fc_y.append((classmap[gesto],(fc,mag_fft_y[np.where(frec == fc)[0][0]])))
+            amplitud_mitad_fc_z.append((classmap[gesto],(fc,mag_fft_z[np.where(frec == fc)[0][0]])))
             
-            # Buscamos todos los índices en frecuencia por encima de fc/2   
-            indices        = list(np.where(frec>(fc/2))[0])
-            # Buscamos la posición en frecuencia del máximo de amplitud por encima de fc/2 
+            # Buscamos todos los índices en frecuencia por encima de fc   
+            indices        = list(np.where(frec>(fc))[0])
+            # Buscamos la posición en frecuencia del máximo de amplitud por encima de fc 
             indice_maximox = np.argmax(mag_fft_x[indices])
             indice_maximoy = np.argmax(mag_fft_y[indices])
             indice_maximoz = np.argmax(mag_fft_z[indices])
@@ -127,7 +129,7 @@ for gesto in classmap:
     f_x = f_y = f_z = 0
     for i in range(len(maximos_x)):
         if classmap[gesto] == maximos_x[i][0]:
-            # Bucamos en los vectores con máximos por encima de fc/2
+            # Bucamos en los vectores con máximos por encima de fc
             if max_x<maximos_x[i][1][1]:
                 max_x = maximos_x[i][1][1]
                 f_x   = maximos_x[i][1][0]
@@ -137,7 +139,7 @@ for gesto in classmap:
             if max_z<maximos_z[i][1][1]:
                 max_z = maximos_z[i][1][1]
                 f_z   = maximos_z[i][1][0]
-            # Buscamos en los vectores con máximos para fc/2
+            # Buscamos en los vectores con máximos para fc
             if max_x_<amplitud_mitad_fc_x[i][1][1]:
                 max_x_ = amplitud_mitad_fc_x[i][1][1]
             if max_y_<amplitud_mitad_fc_y[i][1][1]:
@@ -147,13 +149,13 @@ for gesto in classmap:
                 
     # Se muestran los resultados
     print("\t Aceleración X:")
-    print("\t \t Frecuencia:",fc/2,"[Hz] -> Amplitud:",max_x_,"[mV] -> Ganancia:",20*np.log10(deltaV/max_x_),"[dB]\n")
+    print("\t \t Frecuencia:",fc,"[Hz] -> Amplitud:",max_x_,"[mV] -> Ganancia:",20*np.log10(deltaV/max_x_),"[dB]\n")
     print("\t \t Frecuencia:",f_x ,"[Hz] -> Amplitud:",max_x ,"[mV] -> Ganancia:",20*np.log10(deltaV/max_x), "[dB]\n")
     print("\t Aceleración Y:")
-    print("\t \t Frecuencia:",fc/2,"[Hz] -> Amplitud:",max_y_,"[mV] -> Ganancia:",20*np.log10(deltaV/max_y_),"[dB]\n")
+    print("\t \t Frecuencia:",fc,"[Hz] -> Amplitud:",max_y_,"[mV] -> Ganancia:",20*np.log10(deltaV/max_y_),"[dB]\n")
     print("\t \t Frecuencia:",f_y ,"[Hz] -> Amplitud:",max_y ,"[mV] -> Ganancia:",20*np.log10(deltaV/max_y), "[dB]\n")
     print("\t Aceleración Z:")
-    print("\t \t Frecuencia:",fc/2,"[Hz] -> Amplitud:",max_z_,"[mV] -> Ganancia:",20*np.log10(deltaV/max_z_),"[dB]\n")
+    print("\t \t Frecuencia:",fc,"[Hz] -> Amplitud:",max_z_,"[mV] -> Ganancia:",20*np.log10(deltaV/max_z_),"[dB]\n")
     print("\t \t Frecuencia:",f_z ,"[Hz] -> Amplitud:",max_z ,"[mV] -> Ganancia:",20*np.log10(deltaV/max_z), "[dB]\n")
             
             
