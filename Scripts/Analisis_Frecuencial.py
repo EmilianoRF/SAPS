@@ -54,21 +54,22 @@ for gesto in classmap:
     # Si en el último elemento se detecta la etiqueta correspondiente                
         if (x[registro, N] == gesto):                       
             # Se calcula la magnitud de la transformada rápida de Fourier  
-            frec,mag_fft_x  = fft.fft_mag(x[registro, 0:N],FS)
-            _,mag_fft_y     = fft.fft_mag(y[registro, 0:N],FS)
-            _,mag_fft_z     = fft.fft_mag(z[registro, 0:N],FS)
+            frec,mag_fft_x  = fft.fft_mag(sensibilidad_sensor*x[registro, 0:N],FS)
+            _,mag_fft_y     = fft.fft_mag(sensibilidad_sensor*y[registro, 0:N],FS)
+            _,mag_fft_z     = fft.fft_mag(sensibilidad_sensor*z[registro, 0:N],FS)
             # Se multiplican las magitnudes por el factor de sensibilidad del sensor
             # para convertir los valores en G a valores en mV.
-            mag_fft_x = mag_fft_x*sensibilidad_sensor
-            mag_fft_y = mag_fft_y*sensibilidad_sensor
-            mag_fft_z = mag_fft_z*sensibilidad_sensor
+            # mag_fft_x = mag_fft_x*sensibilidad_sensor
+            # mag_fft_y = mag_fft_y*sensibilidad_sensor
+            # mag_fft_z = mag_fft_z*sensibilidad_sensor
             
             # Se guardan las magnitudes de los módulos de las FFTs en fc
             amplitud_mitad_fc_x.append((classmap[gesto],(fc,mag_fft_x[np.where(frec == fc)[0][0]])))
             amplitud_mitad_fc_y.append((classmap[gesto],(fc,mag_fft_y[np.where(frec == fc)[0][0]])))
             amplitud_mitad_fc_z.append((classmap[gesto],(fc,mag_fft_z[np.where(frec == fc)[0][0]])))
             
-            # Buscamos todos los índices en frecuencia por encima de fc   
+            # Buscamos todos los índices del vector de frecuencias donde la frecuencia
+            # está por encima de fc   
             indices        = list(np.where(frec>(fc))[0])
             # Buscamos la posición en frecuencia del máximo de amplitud por encima de fc 
             indice_maximox = np.argmax(mag_fft_x[indices])
@@ -94,7 +95,7 @@ for gesto in classmap:
             trial_num = trial_num + 1
 
             #Se le da formato a los ejes de cada gráfica
-            xlim = [0,51]
+            xlim = [0,20]
             axes[0].set_title(classmap[gesto] + " |FFT{Aceleración X}|")
             axes[0].grid(linestyle='dashed')
             axes[0].legend(fontsize=6, loc='upper right');
@@ -149,14 +150,14 @@ for gesto in classmap:
                 
     # Se muestran los resultados
     print("\t Aceleración X:")
-    print("\t \t Frecuencia:",fc,"[Hz] -> Amplitud:",max_x_,"[mV] -> Ganancia:",20*np.log10(deltaV/max_x_),"[dB]\n")
-    print("\t \t Frecuencia:",f_x ,"[Hz] -> Amplitud:",max_x ,"[mV] -> Ganancia:",20*np.log10(deltaV/max_x), "[dB]\n")
+    print("\t \t Frecuencia:",fc,"[Hz] -> Amplitud:",max_x_,"[mV] -> Ganancia:",-20*np.log10(deltaV/max_x_),"[dB]\n")
+    print("\t \t Frecuencia:",f_x ,"[Hz] -> Amplitud:",max_x ,"[mV] -> Ganancia:",-20*np.log10(deltaV/max_x), "[dB]\n")
     print("\t Aceleración Y:")
-    print("\t \t Frecuencia:",fc,"[Hz] -> Amplitud:",max_y_,"[mV] -> Ganancia:",20*np.log10(deltaV/max_y_),"[dB]\n")
-    print("\t \t Frecuencia:",f_y ,"[Hz] -> Amplitud:",max_y ,"[mV] -> Ganancia:",20*np.log10(deltaV/max_y), "[dB]\n")
+    print("\t \t Frecuencia:",fc,"[Hz] -> Amplitud:",max_y_,"[mV] -> Ganancia:",-20*np.log10(deltaV/max_y_),"[dB]\n")
+    print("\t \t Frecuencia:",f_y ,"[Hz] -> Amplitud:",max_y ,"[mV] -> Ganancia:",-20*np.log10(deltaV/max_y), "[dB]\n")
     print("\t Aceleración Z:")
-    print("\t \t Frecuencia:",fc,"[Hz] -> Amplitud:",max_z_,"[mV] -> Ganancia:",20*np.log10(deltaV/max_z_),"[dB]\n")
-    print("\t \t Frecuencia:",f_z ,"[Hz] -> Amplitud:",max_z ,"[mV] -> Ganancia:",20*np.log10(deltaV/max_z), "[dB]\n")
+    print("\t \t Frecuencia:",fc,"[Hz] -> Amplitud:",max_z_,"[mV] -> Ganancia:",-20*np.log10(deltaV/max_z_),"[dB]\n")
+    print("\t \t Frecuencia:",f_z ,"[Hz] -> Amplitud:",max_z ,"[mV] -> Ganancia:",-20*np.log10(deltaV/max_z), "[dB]\n")
             
             
             
